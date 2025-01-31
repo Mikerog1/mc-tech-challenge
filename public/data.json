@@ -1,0 +1,82 @@
+[
+  {
+    "id": 1,
+    "label": "Processor",
+    "category": "Hardware",
+    "system_value": "Intel i7",
+    "user_value": "Intel i9",
+    "note": "High performance"
+  },
+  {
+    "id": 2,
+    "label": "RAM",
+    "category": "Hardware",
+    "system_value": "16GB",
+    "user_value": "32GB",
+    "note": "Upgraded"
+  },
+  {
+    "id": 3,
+    "label": "OS",
+    "category": "Software",
+    "system_value": "Windows 10",
+    "user_value": "Windows 11",
+    "note": "Latest update"
+  },
+  {
+    "id": 4,
+    "label": "Storage",
+    "category": "Hardware",
+    "system_value": "512GB SSD",
+    "user_value": "1TB SSD",
+    "note": "Expanded storage capacity"
+  },
+  {
+    "id": 5,
+    "label": "Graphics Card",
+    "category": "Hardware",
+    "system_value": "NVIDIA RTX 3060",
+    "user_value": "NVIDIA RTX 4090",
+    "note": "Improved gaming performance"
+  },
+  {
+    "id": 6,
+    "label": "Battery Life",
+    "category": "Hardware",
+    "system_value": "6 hours",
+    "user_value": "10 hours",
+    "note": "Optimized power consumption"
+  },
+  {
+    "id": 7,
+    "label": "Monitor",
+    "category": "Hardware",
+    "system_value": "24-inch 1080p",
+    "user_value": "32-inch 4K",
+    "note": "Better resolution and size"
+  },
+  {
+    "id": 8,
+    "label": "Antivirus",
+    "category": "Software",
+    "system_value": "Windows Defender",
+    "user_value": "Bitdefender",
+    "note": "Enhanced security features"
+  },
+  {
+    "id": 9,
+    "label": "Network Adapter",
+    "category": "Hardware",
+    "system_value": "Wi-Fi 5",
+    "user_value": "Wi-Fi 6E",
+    "note": "Faster internet speeds"
+  },
+  {
+    "id": 10,
+    "label": "Office Suite",
+    "category": "Software",
+    "system_value": "Microsoft Office 2019",
+    "user_value": "Microsoft 365",
+    "note": "Cloud-based subscription"
+  }
+]

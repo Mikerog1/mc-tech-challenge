@@ -1,101 +1,86 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import { useEffect, useState } from "react";
+import Table from "@/components/Table";
+import Search from "@/components/Search";
+import { Types } from "@/types";
+import CategoryFilter from "./components/CategoryFilter";
+
+export default function Page() {
+  const [data, setData] = useState<Types[]>([]); // Original data
+  const [filteredData, setFilteredData] = useState<Types[]>([]); // Filtered and sorted data
+  const [searchQuery, setSearchQuery] = useState(""); // Search input state
+  const [selectedCategory, setSelectedCategory] = useState(""); // Selected category
+  const [sortField, setSortField] = useState<keyof Types | null>(null); // Sorting field
+  const [sortOrder, setSortOrder] = useState<"asc" | "desc" | null>(null); // Sorting order
+
+  // Fetch data from the data.json file (in the public folder) when the component is mounted
+  useEffect(() => {
+    fetch("/data.json")
+      .then((response) => response.json())
+      .then((data) => {
+        setData(data);
+        setFilteredData(data);
+      });
+  }, []);
+
+  // Suchfunktion: Wird bei onChange im Suchfeld aufgerufen. 
+  // "query" enthält den aktuellen Wert des Input-Feldes.
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    filterData(query, selectedCategory);
+  };
+
+  // Kategorie-Filter: Wird aufgerufen, wenn der Benutzer eine Kategorie auswählt (im Dropdown). 
+  // Aktualisiert den ausgewählten Kategorie-Status und filtert die Daten entsprechend.
+  const handleCategoryChange = (category: string) => {
+    setSelectedCategory(category);
+    filterData(searchQuery, category);
+  };
+
+  // Daten filtern nach Suchbegriff und Kategorie
+  const filterData = (query: string, category: string) => {
+    let filtered = data.filter(
+      (item) =>
+        item.label.toLowerCase().includes(query.toLowerCase()) &&
+        (category === "" || item.category === category)
+    );
+    setFilteredData(filtered);
+  };
+
+  
+// Sortierfunktion: Sortiert die Daten nach dem angegebenen Feld (per Klick auf den Spaltenkopf) 
+// und wechselt dabei die Sortierreihenfolge (aufsteigend "asc" / absteigend "desc").
+  const handleSort = (field: keyof Types) => {
+    let newSortOrder: "asc" | "desc" = sortOrder === "asc" ? "desc" : "asc";
+    setSortField(field);
+    setSortOrder(newSortOrder);
+
+    const sortedData = [...filteredData].sort((a, b) => {
+      if (a[field] < b[field]) return newSortOrder === "asc" ? -1 : 1;
+      if (a[field] > b[field]) return newSortOrder === "asc" ? 1 : -1;
+      return 0;
+    });
+
+    setFilteredData(sortedData);
+  };
+
+
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <div className="relative overflow-x-auto shadow-md sm:rounded-lg p-4">
+      <br />
+      <div className="p-4 pb-1 flex items-center justify-between flex-column flex-wrap md:flex-row space-y-4 md:space-y-0 pb-4 bg-white dark:bg-gray-900">
+        <CategoryFilter categories={[...new Set(data.map((item) => item.category))]} selectedCategory={selectedCategory} onCategoryChange={handleCategoryChange} />
+        <Search query={searchQuery} onSearch={handleSearch} />
+      </div>
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
-        </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
+      <Table
+        data={filteredData}
+        onSort={handleSort}
+        sortField={sortField}
+        sortOrder={sortOrder}
+      />
     </div>
   );
 }
