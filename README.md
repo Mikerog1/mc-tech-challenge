@@ -1,5 +1,19 @@
 
-## Getting Started
+## Install the node packages
+
+To install the required dependencies, run one of the following commands depending on your package manager:
+
+```bash
+npm install
+# or
+yarn install
+# or
+pnpm install
+# or
+bun install
+```
+
+## Deploy the server
 
 To begin, run the development server with one of the following commands, depending on your package manager:
 
